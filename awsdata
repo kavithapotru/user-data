@@ -1,0 +1,26 @@
+#!/bin/bash
+cd /opt
+wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.rpm
+sudo rpm -i jdk-8u131-linux-x64.rpm
+echo 'export JAVA_HOME=/usr/java/jdk1.8.0_131' >> /etc/profile
+echo 'export PATH=$JAVA_HOME/bin:$PATH ' >> /etc/profile
+echo 'Java Home path: /usr/java/jdk1.8.0_131 ' >> /etc/profile
+
+cd /opt
+wget  http://mirrors.wuchna.com/apachemirror/tomcat/tomcat-7/v7.0.91/bin/apache-tomcat-7.0.91.tar.gz
+tar -zxvf apache-tomcat-7.0.91.tar.gz
+mv apache-tomcat-7.0.91 tomcat7
+
+echo '<role rolename="manager-gui"/>' >>  tomcat7/conf/tomcat-users.xml
+echo '<user username="tomcat" password="s3cret" roles="manager-gui"/>' >> tomcat7/conf/tomcat-users.xml
+./tomcat7/bin/startup.sh
+
+cd /opt/tomcat7/webapps
+wget http://updates.jenkins-ci.org/download/war/2.126/jenkins.war
+
+sudo yum install docker -y
+sudo systemctl start docker
+
+yum update -y
+amazon-linux-extras install epel -y
+yum install ansible -y
